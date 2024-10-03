@@ -66,6 +66,17 @@ public class BaseController {
         }
     }
 
+    @GetMapping("/leerEvento")
+    public String sub3(@ModelAttribute("evento") Eventos evento,Model model,  @RequestParam("idEvento") Integer id) {
+        Optional<Eventos> employeeOptional = eventosRepository.findById(id);
+        if (employeeOptional.isPresent()) {
+            model.addAttribute("evento", employeeOptional.get());
+            return "/detalleEvento";
+        } else {
+            return "redirect:/lab/eventos";
+        }
+    }
+
     @GetMapping("/mostrarAgregarArtista")
     public String mostrarGuardarArtista(@ModelAttribute("artista") Artistas artista, Model model) {
         return "formularioArtista";
@@ -89,6 +100,17 @@ public class BaseController {
             return "redirect:/lab/artistas";
         } catch (Exception e) {
             return "redirect:/lab/artistas"; // Redirigir a una página de error
+        }
+    }
+
+    @GetMapping("/leerArtista")
+    public String sub4(@ModelAttribute("artista") Artistas artista,Model model,  @RequestParam("idArtista") Integer id) {
+        Optional<Artistas> employeeOptional = artistasRepository.findById(id);
+        if (employeeOptional.isPresent()) {
+            model.addAttribute("artista", employeeOptional.get());
+            return "/detalleArtista";
+        } else {
+            return "redirect:/lab/artistas";
         }
     }
 
