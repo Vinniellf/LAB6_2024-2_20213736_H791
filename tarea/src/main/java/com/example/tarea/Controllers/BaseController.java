@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/tarea")
+@RequestMapping("/lab")
 public class BaseController {
 
     final BaseRepository baseRepository;
@@ -16,9 +16,9 @@ public class BaseController {
         this.baseRepository = baseRepository;
     }
 
-    @GetMapping("/sub1")
+    @GetMapping("/")
     public String sub1(Model model) {
-        return "plantilla";
+        return "inicio";
     }
 
     /*GetMapping("/sub2")
