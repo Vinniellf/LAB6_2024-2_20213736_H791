@@ -1,24 +1,95 @@
 package com.example.tarea.Controllers;
 
-import ch.qos.logback.core.model.Model;
+import com.example.tarea.Entities.Artistas;
+import com.example.tarea.Entities.Eventos;
+import com.example.tarea.Repositories.ArtistasRepository;
 import com.example.tarea.Repositories.BaseRepository;
+import com.example.tarea.Repositories.EventosRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/lab")
 public class BaseController {
 
     final BaseRepository baseRepository;
+    final EventosRepository eventosRepository;
+    final ArtistasRepository artistasRepository;
 
-    public BaseController(BaseRepository baseRepository) {
+    public BaseController(BaseRepository baseRepository, EventosRepository eventosRepository, ArtistasRepository artistasRepository) {
+        this.eventosRepository = eventosRepository;
+        this.artistasRepository = artistasRepository;
         this.baseRepository = baseRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("/eventos")
     public String sub1(Model model) {
+        List<Eventos> listaEventos = eventosRepository.findAll();
+        model.addAttribute("eventos", listaEventos);
         return "inicio";
+    }
+
+    @GetMapping("/artistas")
+    public String sub2(Model model) {
+        List<Artistas> listaArtistas = artistasRepository.findAll();
+        model.addAttribute("artistas", listaArtistas);
+        return "artistas";
+    }
+
+    @GetMapping("/mostrarAgregarEvento")
+    public String mostrarGuardar(@ModelAttribute("evento") Eventos evento, Model model) {
+        return "formularioEvento";
+    }
+
+    @GetMapping("/editarEvento")
+    public String editar(@ModelAttribute("evento") Eventos evento, Model model, @RequestParam("idEvento") Integer id) {
+        Optional<Eventos> employeeOptional = eventosRepository.findById(id);
+        if (employeeOptional.isPresent()) {
+            model.addAttribute("evento", employeeOptional.get());
+            return "/formularioEvento";
+        } else {
+            return "redirect:/lab/eventos";
+        }
+    }
+
+    @PostMapping("/guardarEvento")
+    public String saveEvento(@ModelAttribute("evento") Eventos evento) {
+        try {
+            eventosRepository.save(evento);
+            return "redirect:/lab/eventos";
+        } catch (Exception e) {
+            return "redirect:/lab/eventos"; // Redirigir a una página de error
+        }
+    }
+
+    @GetMapping("/mostrarAgregarArtista")
+    public String mostrarGuardarArtista(@ModelAttribute("artista") Artistas artista, Model model) {
+        return "formularioArtista";
+    }
+
+    @GetMapping("/editarArtista")
+    public String editarArtista(@ModelAttribute("artista") Artistas artista, Model model, @RequestParam("idArtista") Integer id) {
+        Optional<Artistas> artistasOptional = artistasRepository.findById(id);
+        if (artistasOptional.isPresent()) {
+            model.addAttribute("artista", artistasOptional.get());
+            return "/formularioArtistas";
+        } else {
+            return "redirect:/lab/artistas";
+        }
+    }
+
+    @PostMapping("/guardarArtista")
+    public String saveEvento(@ModelAttribute("artista") Artistas artista) {
+        try {
+            artistasRepository.save(artista);
+            return "redirect:/lab/artistas";
+        } catch (Exception e) {
+            return "redirect:/lab/artistas"; // Redirigir a una página de error
+        }
     }
 
     /*GetMapping("/sub2")
