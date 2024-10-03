@@ -5,6 +5,7 @@ import com.example.tarea.Entities.Eventos;
 import com.example.tarea.Repositories.ArtistasRepository;
 import com.example.tarea.Repositories.BaseRepository;
 import com.example.tarea.Repositories.EventosRepository;
+import com.example.tarea.Repositories.Eventos_ArtistasRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,11 +23,13 @@ public class BaseController {
     final BaseRepository baseRepository;
     final EventosRepository eventosRepository;
     final ArtistasRepository artistasRepository;
+    final Eventos_ArtistasRepository eventos_ArtistasRepository;
 
-    public BaseController(BaseRepository baseRepository, EventosRepository eventosRepository, ArtistasRepository artistasRepository) {
+    public BaseController(BaseRepository baseRepository, EventosRepository eventosRepository, ArtistasRepository artistasRepository, Eventos_ArtistasRepository eventos_ArtistasRepository) {
         this.eventosRepository = eventosRepository;
         this.artistasRepository = artistasRepository;
         this.baseRepository = baseRepository;
+        this.eventos_ArtistasRepository = eventos_ArtistasRepository;
     }
 
     @GetMapping("/eventos")
@@ -75,6 +78,7 @@ public class BaseController {
         Optional<Eventos> employeeOptional = eventosRepository.findById(id);
         if (employeeOptional.isPresent()) {
             model.addAttribute("evento", employeeOptional.get());
+            model.addAttribute("evento_artistas", eventos_ArtistasRepository.buscarPorEvento(id));
             return "/detalleEvento";
         } else {
             return "redirect:/lab/eventos";

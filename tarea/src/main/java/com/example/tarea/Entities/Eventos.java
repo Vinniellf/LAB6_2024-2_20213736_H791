@@ -28,7 +28,7 @@ public class Eventos {
     private Date fecha;
 
     @NotNull(message = "El numero es obligatorio")
-    @Digits(integer = 5, fraction = 0)
+    @Digits(integer = 5, fraction = 0, message = "Debe ser un numero menor que 99999")
     @Positive(message = "Debe ser un numero entero positivo ")
     @Column(name = "asistentesEsperados")
     private Integer asistentes;
