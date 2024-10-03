@@ -5,9 +5,12 @@ import com.example.tarea.Entities.Eventos;
 import com.example.tarea.Repositories.ArtistasRepository;
 import com.example.tarea.Repositories.BaseRepository;
 import com.example.tarea.Repositories.EventosRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,12 +60,13 @@ public class BaseController {
     }
 
     @PostMapping("/guardarEvento")
-    public String saveEvento(@ModelAttribute("evento") Eventos evento) {
-        try {
+    public String saveEvento(@ModelAttribute("evento") @Valid Eventos evento, BindingResult bindingResult, RedirectAttributes attr) {
+        if(bindingResult.hasErrors()){
+            return "formularioEvento";
+        } else {
+            attr.addFlashAttribute("msg", "Evento" + (evento.getId() == 0 ? "Creado exitosamente" : "Actualizado exitosamente"));
             eventosRepository.save(evento);
             return "redirect:/lab/eventos";
-        } catch (Exception e) {
-            return "redirect:/lab/eventos"; // Redirigir a una página de error
         }
     }
 
@@ -79,7 +83,7 @@ public class BaseController {
 
     @GetMapping("/mostrarAgregarArtista")
     public String mostrarGuardarArtista(@ModelAttribute("artista") Artistas artista, Model model) {
-        return "formularioArtista";
+        return "formularioArtistas";
     }
 
     @GetMapping("/editarArtista")
@@ -94,12 +98,13 @@ public class BaseController {
     }
 
     @PostMapping("/guardarArtista")
-    public String saveEvento(@ModelAttribute("artista") Artistas artista) {
-        try {
+    public String saveEvento(@ModelAttribute("artista") @Valid Artistas artista, BindingResult bindingResult, RedirectAttributes attr) {
+        if(bindingResult.hasErrors()){
+            return "formularioArtistas";
+        } else {
+            attr.addFlashAttribute("msg", "Artista" + (artista.getId() == 0 ? "Creado exitosamente" : "Actualizado exitosamente"));
             artistasRepository.save(artista);
             return "redirect:/lab/artistas";
-        } catch (Exception e) {
-            return "redirect:/lab/artistas"; // Redirigir a una página de error
         }
     }
 
