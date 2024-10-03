@@ -79,7 +79,7 @@ public class BaseController {
         if (employeeOptional.isPresent()) {
             model.addAttribute("evento", employeeOptional.get());
             model.addAttribute("evento_artistas", eventos_ArtistasRepository.buscarPorEvento(id));
-            return "/detalleEvento";
+            return "detalleEvento";
         } else {
             return "redirect:/lab/eventos";
         }
