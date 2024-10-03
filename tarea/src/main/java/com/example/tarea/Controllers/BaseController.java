@@ -117,7 +117,7 @@ public class BaseController {
         Optional<Artistas> employeeOptional = artistasRepository.findById(id);
         if (employeeOptional.isPresent()) {
             model.addAttribute("artista", employeeOptional.get());
-            return "/detalleArtista";
+            return "detalleArtista";
         } else {
             return "redirect:/lab/artistas";
         }
