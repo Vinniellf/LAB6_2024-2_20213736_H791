@@ -56,7 +56,7 @@ public class BaseController {
         Optional<Eventos> employeeOptional = eventosRepository.findById(id);
         if (employeeOptional.isPresent()) {
             model.addAttribute("evento", employeeOptional.get());
-            return "/formularioEvento";
+            return "formularioEvento";
         } else {
             return "redirect:/lab/eventos";
         }
@@ -67,7 +67,7 @@ public class BaseController {
         if(bindingResult.hasErrors()){
             return "formularioEvento";
         } else {
-            attr.addFlashAttribute("msg", "Evento" + (evento.getId() == 0 ? "Creado exitosamente" : "Actualizado exitosamente"));
+            attr.addFlashAttribute("msg", "Evento " + (evento.getId() == null ? "creado exitosamente" : "actualizado exitosamente"));
             eventosRepository.save(evento);
             return "redirect:/lab/eventos";
         }
@@ -95,7 +95,7 @@ public class BaseController {
         Optional<Artistas> artistasOptional = artistasRepository.findById(id);
         if (artistasOptional.isPresent()) {
             model.addAttribute("artista", artistasOptional.get());
-            return "/formularioArtistas";
+            return "formularioArtistas";
         } else {
             return "redirect:/lab/artistas";
         }
@@ -106,7 +106,7 @@ public class BaseController {
         if(bindingResult.hasErrors()){
             return "formularioArtistas";
         } else {
-            attr.addFlashAttribute("msg", "Artista" + (artista.getId() == 0 ? "Creado exitosamente" : "Actualizado exitosamente"));
+            attr.addFlashAttribute("msg", "Artista " + (artista.getId() == null ? "creado exitosamente" : "actualizado exitosamente"));
             artistasRepository.save(artista);
             return "redirect:/lab/artistas";
         }
